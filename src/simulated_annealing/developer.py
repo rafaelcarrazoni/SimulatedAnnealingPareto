@@ -12,5 +12,10 @@ class Developer:
 
         self.workload = []
 
-    def take_job(self):
-        pass
+    def take_job(self, history):
+        if history.taken == True or history.duration > self.current_capacity:
+            return
+        self.workload.append(history)
+        self.current_capacity = self.current_capacity - history.duration
+        history.taken = True
+        
