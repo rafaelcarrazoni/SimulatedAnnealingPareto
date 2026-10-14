@@ -3,7 +3,7 @@ import math
 import random
 
 from .developer import Developer
-from .history import History, get_history_id
+from .history import History
 
 
 class Blacksmith:
@@ -69,7 +69,7 @@ class Blacksmith:
         """Build a randomized feasible assignment without changing the inputs."""
         team = copy.deepcopy(team0)
         self._histories = copy.deepcopy(histories0)
-        history_ids = [get_history_id(history) for history in self._histories]
+        history_ids = [history.get_history_id() for history in self._histories]
         if len(history_ids) != len(set(history_ids)):
             raise ValueError("history IDs must be unique")
 
@@ -100,11 +100,11 @@ class Blacksmith:
             for developer_index, developer in enumerate(neighbor)
             for history in developer.workload
         ]
-        assigned_ids = {get_history_id(history) for _, history in assignments}
+        assigned_ids = {history.get_history_id() for _, history in assignments}
         unassigned = [
             history
             for history in self._histories
-            if get_history_id(history) not in assigned_ids
+            if history.get_history_id() not in assigned_ids
         ]
 
         add_choices = [
@@ -236,7 +236,7 @@ class Blacksmith:
         return tuple(
             tuple(
                 sorted(
-                    get_history_id(history)
+                    history.get_history_id()
                     for history in developer.workload
                 )
             )

@@ -8,7 +8,7 @@ Este repositório implementa uma busca por Simulated Annealing com dominância d
 
 - `src/simulated_annealing/blacksmith.py`: inicialização, geração de vizinhos, recozimento simulado e arquivo de soluções não dominadas.
 - `src/simulated_annealing/developer.py`: capacidade disponível e histórias atribuídas a cada desenvolvedor.
-- `src/simulated_annealing/history.py`: modelo da história e função `get_history_id`.
+- `src/simulated_annealing/history.py`: modelo da história, incluindo o método `History.get_history_id`.
 - `src/simulated_annealing/__init__.py`: entrada do pacote.
 
 ## Convenções e invariantes
@@ -16,7 +16,7 @@ Este repositório implementa uma busca por Simulated Annealing com dominância d
 - Mantenha a lógica e os modelos existentes; faça alterações pequenas e coerentes com a arquitetura.
 - Use type hints nas funções e mantenha a compatibilidade com Python `>=3.12`.
 - Use `uv` para gerenciar o ambiente e executar comandos do projeto.
-- Cada história deve ter um `id` inteiro único no conjunto passado ao algoritmo. Use `get_history_id` para obter/validar essa identidade; não use duração e valor como substitutos de ID.
+- Cada história deve ter um `id` inteiro único no conjunto passado ao algoritmo. Use `History.get_history_id()` para obter/validar essa identidade; não use duração e valor como substitutos de ID.
 - Não atribua uma história a mais de um desenvolvedor e nunca ultrapasse a capacidade disponível.
 - O algoritmo não deve modificar os objetos de entrada do usuário quando construir soluções ou vizinhos.
 - Preserve soluções não dominadas considerando valor maior como melhor e desequilíbrio menor como melhor.

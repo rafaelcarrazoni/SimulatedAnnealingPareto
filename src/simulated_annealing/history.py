@@ -13,9 +13,8 @@ class History:
         self.payment = payment
         self.taken = False
 
-
-def get_history_id(history: History) -> int:
-    history_id = getattr(history, "id", None)
-    if not isinstance(history_id, int):
-        raise ValueError("every history must have an integer ID")
-    return history_id
+    def get_history_id(self) -> int:
+        history_id = getattr(self, "id", None)
+        if not isinstance(history_id, int):
+            raise ValueError("every history must have an integer ID")
+        return history_id
