@@ -1,4 +1,3 @@
-import random
 class Developer:
 
     max_capacity : int
@@ -6,7 +5,12 @@ class Developer:
     workload : list
 
 
-    def __init__(self, max_capacity = 40) -> None:
+    def __init__(self, max_capacity: int = 40) -> None:
+        if not isinstance(max_capacity, int) or isinstance(max_capacity, bool):
+            raise TypeError("max_capacity must be an integer")
+        if max_capacity <= 0:
+            raise ValueError("max_capacity must be greater than zero")
+
         self.max_capacity = max_capacity
         self.current_capacity = max_capacity
 

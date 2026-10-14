@@ -1,0 +1,89 @@
+{
+  "algorithm": "comparison",
+  "solutions": [
+    {
+      "business_value": 5450,
+      "imbalance": 0.04513888888888884,
+      "developers": [
+        {
+          "max_capacity": 32,
+          "remaining_capacity": 11,
+          "assigned_hours": 21,
+          "histories": [
+            {
+              "id": 7,
+              "duration": 7,
+              "payment": 450
+            },
+            {
+              "id": 4,
+              "duration": 14,
+              "payment": 900
+            }
+          ]
+        },
+        {
+          "max_capacity": 40,
+          "remaining_capacity": 15,
+          "assigned_hours": 25,
+          "histories": [
+            {
+              "id": 0,
+              "duration": 8,
+              "payment": 500
+            },
+            {
+              "id": 2,
+              "duration": 6,
+              "payment": 400
+            },
+            {
+              "id": 8,
+              "duration": 11,
+              "payment": 700
+            }
+          ]
+        },
+        {
+          "max_capacity": 36,
+          "remaining_capacity": 14,
+          "assigned_hours": 22,
+          "histories": [
+            {
+              "id": 3,
+              "duration": 10,
+              "payment": 650
+            },
+            {
+              "id": 1,
+              "duration": 12,
+              "payment": 750
+            }
+          ]
+        },
+        {
+          "max_capacity": 28,
+          "remaining_capacity": 10,
+          "assigned_hours": 18,
+          "histories": [
+            {
+              "id": 9,
+              "duration": 5,
+              "payment": 300
+            },
+            {
+              "id": 6,
+              "duration": 9,
+              "payment": 550
+            },
+            {
+              "id": 5,
+              "duration": 4,
+              "payment": 250
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
