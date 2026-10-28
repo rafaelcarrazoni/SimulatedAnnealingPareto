@@ -43,7 +43,7 @@ uv run simulated-annealing --seed 42
 ```
 
 Também é possível chamar `main(seed=42)` diretamente. Sem seed, os dados e as buscas usam sorteios não determinísticos.
-Os valores padrão e os limites dos sorteios estão centralizados como constantes em `src/simulated_annealing/config.py`; use `DEFAULT_SEED` para definir uma seed padrão ou substitua-a com `--seed`.
+Os valores padrão, limites dos sorteios e parâmetros do recozimento estão centralizados como constantes em `src/simulated_annealing/config.py`. Configure `TEMPERATURE`, `ALPHA`, `MAX_ITERATIONS` e `MINIMUM_TEMPERATURE` para ajustar o `Blacksmith`; os valores efetivamente usados são incluídos em `initial_configuration` no export. Use `DEFAULT_SEED` para definir uma seed padrão ou substitua-a com `--seed`.
 
 O comando executa o fluxo `SOLUTIONS` vezes (configurado em `src/simulated_annealing/config.py`). A cada repetição, gera uma nova equipe e conjunto de histórias, executa os dois algoritmos com os mesmos dados e grava os resultados em:
 

@@ -2,6 +2,7 @@ import copy
 import math
 import random
 
+from .config import ALPHA, MAX_ITERATIONS, MINIMUM_TEMPERATURE, TEMPERATURE
 from .developer import Developer
 from .history import History
 
@@ -9,10 +10,10 @@ from .history import History
 class Blacksmith:
     def __init__(
         self,
-        temperature: float = 1.0,
-        alpha: float = 0.99,
-        max_iterations: int = 1_000,
-        minimum_temperature: float = 0.01,
+        temperature: float = TEMPERATURE,
+        alpha: float = ALPHA,
+        max_iterations: int = MAX_ITERATIONS,
+        minimum_temperature: float = MINIMUM_TEMPERATURE,
         seed: int | None = None,
     ) -> None:
         if temperature <= 0:
