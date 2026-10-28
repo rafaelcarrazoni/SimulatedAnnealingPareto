@@ -36,12 +36,21 @@ Execute a instância de demonstração:
 uv run simulated-annealing
 ```
 
+As capacidades dos desenvolvedores e os valores das histórias são sorteados a cada execução. Para repetir os mesmos dados e resultados, informe uma seed:
+
+```bash
+uv run simulated-annealing --seed 42
+```
+
+Também é possível chamar `main(seed=42)` diretamente. Sem seed, os dados e as buscas usam sorteios não determinísticos.
+Os valores padrão e os limites dos sorteios estão centralizados como constantes em `src/simulated_annealing/config.py`; use `DEFAULT_SEED` para definir uma seed padrão ou substitua-a com `--seed`.
+
 O comando chama os dois algoritmos com a mesma equipe e conjunto de histórias e grava os resultados em:
 
-- `results/blacksmith.json`
-- `results/comparison.json`
+- `results/raw/blacksmith.jsonl`
+- `results/raw/comparison.jsonl`
 
-Os arquivos são sobrescritos quando o programa é executado novamente.
+Os exports JSONL brutos são salvos em `results/raw/`. Cada execução acrescenta um registro ao arquivo correspondente, preservando os registros de execuções anteriores; a pasta é criada automaticamente se necessário.
 
 ## Dados de entrada
 
@@ -87,6 +96,7 @@ blacksmith = Blacksmith(
     alpha=0.99,
     max_iterations=1_000,
     minimum_temperature=0.01,
+    seed=42,
 )
 solutions = blacksmith.anneal(team, histories)
 ```
@@ -106,9 +116,9 @@ solutions = comparison.search(team, histories)
 
 `seed` controla o gerador aleatório próprio da baseline e permite repetir a mesma sequência de sorteios.
 
-## Resultados JSON
+## Resultados JSONL
 
-`Export.export(algorithm)` salva as soluções da instância de `Blacksmith` ou `Comparison` recebida e retorna o caminho do arquivo:
+`Export.export(algorithm)` acrescenta ao arquivo correspondente um registro JSON em uma única linha e retorna o caminho. Se o arquivo ainda não existir, ele é criado:
 
 ```python
 from simulated_annealing.export import Export
@@ -117,7 +127,7 @@ blacksmith_path = Export.export(blacksmith)
 comparison_path = Export.export(comparison)
 ```
 
-Cada arquivo identifica o algoritmo e contém uma lista `solutions`. Cada solução inclui:
+Cada linha é um registro independente com o algoritmo e uma lista `solutions` daquela execução. Os arquivos acumulam os registros de execuções sucessivas. Cada solução inclui:
 
 - `business_value`: soma dos valores (`payment`) atribuídos;
 - `imbalance`: diferença entre as taxas de ocupação extremas;
@@ -130,7 +140,7 @@ src/simulated_annealing/
 ├── blacksmith.py   # Simulated Annealing e arquivo Pareto
 ├── comparison.py   # baseline de busca aleatória
 ├── developer.py   # modelo do desenvolvedor e controle de capacidade
-├── export.py      # exportação das soluções em JSON
+├── export.py      # exportação das soluções em JSONL
 ├── history.py     # modelo da história e identidade
 └── main.py        # instância de demonstração e execução dos algoritmos
 ```

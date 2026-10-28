@@ -13,6 +13,7 @@ class Blacksmith:
         alpha: float = 0.99,
         max_iterations: int = 1_000,
         minimum_temperature: float = 0.01,
+        seed: int | None = None,
     ) -> None:
         if temperature <= 0:
             raise ValueError("temperature must be greater than zero")
@@ -28,6 +29,7 @@ class Blacksmith:
         self.alpha = alpha
         self.max_iterations = max_iterations
         self.minimum_temperature = minimum_temperature
+        self._random = random.Random(seed)
         self.solutions: list[list[Developer]] = []
         self._histories: list[History] = []
 
@@ -80,7 +82,7 @@ class Blacksmith:
         for history in self._histories:
             history.taken = False
 
-        random.shuffle(self._histories)
+        self._random.shuffle(self._histories)
         for history in self._histories:
             available = [
                 developer
@@ -88,7 +90,7 @@ class Blacksmith:
                 if history.duration <= developer.current_capacity
             ]
             if available:
-                random.choice(available).take_job(history)
+                self._random.choice(available).take_job(history)
 
         return team
 
@@ -133,29 +135,29 @@ class Blacksmith:
         if not actions:
             return neighbor
 
-        action = random.choice(actions)
+        action = self._random.choice(actions)
         if action == "remove":
-            developer_index, history = random.choice(assignments)
+            developer_index, history = self._random.choice(assignments)
             developer = neighbor[developer_index]
             developer.workload.remove(history)
             developer.current_capacity += history.duration
             history.taken = False
         elif action == "move":
-            developer_index, history, target_index = random.choice(move_choices)
+            developer_index, history, target_index = self._random.choice(move_choices)
             source = neighbor[developer_index]
             source.workload.remove(history)
             source.current_capacity += history.duration
             history.taken = False
             neighbor[target_index].take_job(history)
         else:
-            history = copy.deepcopy(random.choice(add_choices))
+            history = copy.deepcopy(self._random.choice(add_choices))
             history.taken = False
             available = [
                 developer
                 for developer in neighbor
                 if history.duration <= developer.current_capacity
             ]
-            random.choice(available).take_job(history)
+            self._random.choice(available).take_job(history)
 
         return neighbor
 
@@ -229,7 +231,7 @@ class Blacksmith:
             (current[0] - candidate[0]) / value_scale
             + (candidate[1] - current[1]) / imbalance_scale
         )
-        return random.random() < math.exp(-loss / self.temperature)
+        return self._random.random() < math.exp(-loss / self.temperature)
 
     @staticmethod
     def _solution_key(solution: list[Developer]) -> tuple:

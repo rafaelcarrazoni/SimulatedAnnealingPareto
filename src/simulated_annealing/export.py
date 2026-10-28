@@ -16,9 +16,9 @@ class Export:
         else:
             raise TypeError("obj must be a Blacksmith or Comparison instance")
 
-        results_dir = Path(__file__).resolve().parents[2] / "results"
+        results_dir = Path(__file__).resolve().parents[2] / "results" / "raw"
         results_dir.mkdir(parents=True, exist_ok=True)
-        output_path = results_dir / f"{algorithm}.json"
+        output_path = results_dir / f"{algorithm}.jsonl"
 
         payload = {
             "algorithm": algorithm,
@@ -27,8 +27,8 @@ class Export:
                 for solution in obj.solutions
             ],
         }
-        with output_path.open("w", encoding="utf-8") as result_file:
-            json.dump(payload, result_file, indent=2, ensure_ascii=False)
+        with output_path.open("a", encoding="utf-8") as result_file:
+            json.dump(payload, result_file, ensure_ascii=False)
             result_file.write("\n")
 
         return output_path
