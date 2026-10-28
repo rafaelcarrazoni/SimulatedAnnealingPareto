@@ -29,8 +29,16 @@ class Blacksmith:
         self.alpha = alpha
         self.max_iterations = max_iterations
         self.minimum_temperature = minimum_temperature
+        self.initial_configuration: dict[str, int | float | None] = {
+            "temperature": temperature,
+            "alpha": alpha,
+            "max_iterations": max_iterations,
+            "minimum_temperature": minimum_temperature,
+            "seed": seed,
+        }
         self._random = random.Random(seed)
         self.solutions: list[list[Developer]] = []
+        self.initial_solution_snapshot: list[Developer] | None = None
         self._histories: list[History] = []
 
     def anneal(
@@ -38,6 +46,7 @@ class Blacksmith:
     ) -> list[list[Developer]]:
         """Return the archive of non-dominated feasible assignments."""
         current = self.initial_solution(team, histories)
+        self.initial_solution_snapshot = copy.deepcopy(current)
         self.solutions = [copy.deepcopy(current)]
         self.temperature = self._initial_temperature
 

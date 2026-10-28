@@ -7,7 +7,9 @@ authors = [
     { name = "rafaelcarrazoni", email = "senseibabarel@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "matplotlib>=3.11.2",
+]
 
 [project.scripts]
 simulated-annealing = "simulated_annealing.main:cli"

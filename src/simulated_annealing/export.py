@@ -20,13 +20,21 @@ class Export:
         results_dir.mkdir(parents=True, exist_ok=True)
         output_path = results_dir / f"{algorithm}.jsonl"
 
-        payload = {
+        payload: dict[str, object] = {
             "algorithm": algorithm,
             "solutions": [
                 Export._serialize_solution(solution)
                 for solution in obj.solutions
             ],
         }
+        if isinstance(obj, Blacksmith):
+            payload["initial_configuration"] = obj.initial_configuration
+            payload["initial_solution"] = (
+                Export._serialize_solution(obj.initial_solution_snapshot)
+                if obj.initial_solution_snapshot is not None
+                else None
+            )
+
         with output_path.open("a", encoding="utf-8") as result_file:
             json.dump(payload, result_file, ensure_ascii=False)
             result_file.write("\n")

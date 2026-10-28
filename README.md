@@ -45,7 +45,7 @@ uv run simulated-annealing --seed 42
 Também é possível chamar `main(seed=42)` diretamente. Sem seed, os dados e as buscas usam sorteios não determinísticos.
 Os valores padrão e os limites dos sorteios estão centralizados como constantes em `src/simulated_annealing/config.py`; use `DEFAULT_SEED` para definir uma seed padrão ou substitua-a com `--seed`.
 
-O comando chama os dois algoritmos com a mesma equipe e conjunto de histórias e grava os resultados em:
+O comando executa o fluxo `SOLUTIONS` vezes (configurado em `src/simulated_annealing/config.py`). A cada repetição, gera uma nova equipe e conjunto de histórias, executa os dois algoritmos com os mesmos dados e grava os resultados em:
 
 - `results/raw/blacksmith.jsonl`
 - `results/raw/comparison.jsonl`
@@ -127,11 +127,15 @@ blacksmith_path = Export.export(blacksmith)
 comparison_path = Export.export(comparison)
 ```
 
-Cada linha é um registro independente com o algoritmo e uma lista `solutions` daquela execução. Os arquivos acumulam os registros de execuções sucessivas. Cada solução inclui:
+Cada linha é um registro independente com o algoritmo e uma lista `solutions` daquela execução. Os arquivos acumulam os registros de execuções sucessivas. O registro do `Blacksmith` também inclui `initial_configuration` (parâmetros configurados e seed) e `initial_solution` (a atribuição aleatória inicial). Cada solução inclui:
 
 - `business_value`: soma dos valores (`payment`) atribuídos;
 - `imbalance`: diferença entre as taxas de ocupação extremas;
 - `developers`: capacidade, horas restantes, horas atribuídas e histórias de cada desenvolvedor.
+
+## Análise gráfica
+
+O notebook `analysis/results.ipynb` lê os arquivos JSONL em `results/raw/` e gera gráficos das soluções Pareto, das soluções iniciais do Blacksmith e dos melhores objetivos por execução. Execute `uv run simulated-annealing` para gerar resultados e abra o notebook com o kernel do ambiente do projeto (`uv sync` instala a dependência `matplotlib`).
 
 ## Estrutura do projeto
 
