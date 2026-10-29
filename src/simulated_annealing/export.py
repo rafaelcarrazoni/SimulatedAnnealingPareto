@@ -6,9 +6,15 @@ from .comparison import Comparison
 from .developer import Developer
 
 
+RESULTS_DIR = Path(__file__).resolve().parents[2] / "results" / "raw"
+
+
 class Export:
     @staticmethod
-    def export(obj: Blacksmith | Comparison) -> Path:
+    def export(
+        obj: Blacksmith | Comparison,
+        run_metadata: dict[str, object] | None = None,
+    ) -> Path:
         if isinstance(obj, Blacksmith):
             algorithm = "blacksmith"
         elif isinstance(obj, Comparison):
@@ -16,9 +22,8 @@ class Export:
         else:
             raise TypeError("obj must be a Blacksmith or Comparison instance")
 
-        results_dir = Path(__file__).resolve().parents[2] / "results" / "raw"
-        results_dir.mkdir(parents=True, exist_ok=True)
-        output_path = results_dir / f"{algorithm}.jsonl"
+        RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        output_path = RESULTS_DIR / f"{algorithm}.jsonl"
 
         payload: dict[str, object] = {
             "algorithm": algorithm,
@@ -27,6 +32,8 @@ class Export:
                 for solution in obj.solutions
             ],
         }
+        if run_metadata is not None:
+            payload["run_metadata"] = run_metadata
         if isinstance(obj, Blacksmith):
             payload["initial_configuration"] = obj.initial_configuration
             payload["initial_solution"] = (

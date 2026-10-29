@@ -13,6 +13,7 @@ dependencies = [
 
 [project.scripts]
 simulated-annealing = "simulated_annealing.main:cli"
+simulated-annealing-ui = "simulated_annealing.dashboard:cli"
 
 [build-system]
 requires = ["uv_build>=0.12.13,<0.13.0"]

@@ -1,5 +1,6 @@
 import copy
 import random
+from collections.abc import Callable
 
 from .developer import Developer
 from .history import History
@@ -8,7 +9,7 @@ from .history import History
 class Comparison:
     """Random feasible-search baseline for the simulated annealing algorithm."""
 
-    def __init__(self, n_evaluations: int = 10_000, seed: int | None = None) -> None:
+    def __init__(self, n_evaluations: int = 500, seed: int | None = None) -> None:
         if n_evaluations <= 0:
             raise ValueError("n_evaluations must be greater than zero")
 
@@ -17,7 +18,10 @@ class Comparison:
         self.solutions: list[list[Developer]] = []
 
     def search(
-        self, team: list[Developer], histories: list[History]
+        self,
+        team: list[Developer],
+        histories: list[History],
+        progress_callback: Callable[[int, int], None] | None = None,
     ) -> list[list[Developer]]:
         """Return the non-dominated feasible assignments found at random."""
         history_ids = [history.get_history_id() for history in histories]
@@ -25,9 +29,11 @@ class Comparison:
             raise ValueError("history IDs must be unique")
 
         self.solutions = []
-        for _ in range(self.n_evaluations):
+        for evaluation in range(1, self.n_evaluations + 1):
             candidate = self._random_solution(team, histories)
             self._add_to_archive(candidate)
+            if progress_callback is not None:
+                progress_callback(evaluation, self.n_evaluations)
 
         return sorted(self.solutions, key=lambda solution: self.evaluate(solution)[0])
 

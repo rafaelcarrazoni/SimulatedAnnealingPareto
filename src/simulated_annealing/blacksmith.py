@@ -1,6 +1,7 @@
 import copy
 import math
 import random
+from collections.abc import Callable
 
 from .config import ALPHA, MAX_ITERATIONS, MINIMUM_TEMPERATURE, TEMPERATURE
 from .developer import Developer
@@ -43,7 +44,10 @@ class Blacksmith:
         self._histories: list[History] = []
 
     def anneal(
-        self, team: list[Developer], histories: list[History]
+        self,
+        team: list[Developer],
+        histories: list[History],
+        progress_callback: Callable[[int, int], None] | None = None,
     ) -> list[list[Developer]]:
         """Return the archive of non-dominated feasible assignments."""
         current = self.initial_solution(team, histories)
@@ -51,8 +55,10 @@ class Blacksmith:
         self.solutions = [copy.deepcopy(current)]
         self.temperature = self._initial_temperature
 
-        for _ in range(self.max_iterations):
+        for iteration in range(1, self.max_iterations + 1):
             if self.temperature <= self.minimum_temperature:
+                if progress_callback is not None:
+                    progress_callback(self.max_iterations, self.max_iterations)
                 break
 
             neighbor = self.get_neighbor(current)
@@ -64,6 +70,8 @@ class Blacksmith:
                 current = neighbor
 
             self.temperature *= self.alpha
+            if progress_callback is not None:
+                progress_callback(iteration, self.max_iterations)
 
         return self.solutions
 
