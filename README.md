@@ -45,19 +45,6 @@ uv run simulated-annealing --seed 42
 Também é possível chamar `main(seed=42)` diretamente. Sem seed, os dados e as buscas usam sorteios não determinísticos.
 Os valores padrão, limites dos sorteios e parâmetros do recozimento estão centralizados como constantes em `src/simulated_annealing/config.py`. Configure `TEMPERATURE`, `ALPHA`, `MAX_ITERATIONS` e `MINIMUM_TEMPERATURE` para ajustar o `Blacksmith`; os valores efetivamente usados são incluídos em `initial_configuration` no export. Use `DEFAULT_SEED` para definir uma seed padrão ou substitua-a com `--seed`.
 
-## Interface gráfica
-
-Abra o painel com `uv run simulated-annealing-ui`. Edite os parâmetros do recozimento, da instância, da quantidade de execuções e das avaliações da busca aleatória; os valores são validados e aplicados à próxima busca. A seed é opcional. **Restaurar padrão** repõe os valores de `SimulationConfig` em `src/simulated_annealing/config.py`; **Atualizar** relê os arquivos em `results/raw/`.
-
-O dashboard exibe as soluções não dominadas de cada execução, os melhores valores e desequilíbrios por execução e a quantidade de soluções não dominadas encontradas por cada algoritmo. Como cada execução sorteia uma instância própria, as comparações entre algoritmos são pareadas pelo identificador da execução. O desequilíbrio é a diferença entre a maior e a menor taxa de ocupação; por exemplo, 80% e 60% representam 20 pontos percentuais (20 p.p.), não 20% de diferença relativa. Uma barra acompanha o progresso das iterações do Blacksmith e das avaliações da busca aleatória.
-
-O comando executa o fluxo `SOLUTIONS` vezes (configurado em `src/simulated_annealing/config.py`). A cada repetição, gera uma nova equipe e conjunto de histórias, executa os dois algoritmos com os mesmos dados e grava os resultados em:
-
-- `results/raw/blacksmith.jsonl`
-- `results/raw/comparison.jsonl`
-
-Os exports JSONL brutos são salvos em `results/raw/`. Cada execução acrescenta um registro ao arquivo correspondente, preservando os registros de execuções anteriores; a pasta é criada automaticamente se necessário.
-
 ## Dados de entrada
 
 A instância de demonstração está definida em `src/simulated_annealing/main.py`. Desenvolvedores e histórias são criados com os modelos `Developer` e `History`:
@@ -141,7 +128,7 @@ Cada linha é um registro independente com o algoritmo e uma lista `solutions` d
 
 ## Análise gráfica
 
-O notebook `analysis/results.ipynb` lê os arquivos JSONL em `results/raw/` e gera gráficos das soluções Pareto, da comparação pareada dos melhores objetivos do Blacksmith e do Comparison por execução, das soluções iniciais e finais do Blacksmith identificadas pelo número da execução e dos melhores objetivos por execução. Execute `uv run simulated-annealing` para gerar resultados e abra o notebook com o kernel do ambiente do projeto (`uv sync` instala a dependência `matplotlib`).
+O notebook `analysis/results.ipynb` lê os arquivos JSONL em `results/raw/`, mostra a quantidade de iterações realizadas por algoritmo e gera gráficos das soluções Pareto, das soluções iniciais e finais do Blacksmith identificadas pelo número da execução e dos melhores objetivos por execução. Execute `uv run simulated-annealing` para gerar resultados e abra o notebook com o kernel do ambiente do projeto (`uv sync` instala a dependência `matplotlib`).
 
 ## Estrutura do projeto
 

@@ -4,23 +4,23 @@ from dataclasses import dataclass
 
 DEFAULT_SEED: int | None = None
 
-TEMPERATURE = 1.0
-ALPHA = 0.99
-MAX_ITERATIONS = 1_0000
-MINIMUM_TEMPERATURE = 0.001
+TEMPERATURE = 0.1
+ALPHA = 0.9995
+MAX_ITERATIONS = 20_000
+MINIMUM_TEMPERATURE = 0.00001
 
-TEAM_SIZE = 320
+TEAM_SIZE = 30
 MIN_DEVELOPER_CAPACITY = 28
 MAX_DEVELOPER_CAPACITY = 40
 
-HISTORY_COUNT = 4500
+HISTORY_COUNT = 120
 MIN_HISTORY_DURATION = 4
 MAX_HISTORY_DURATION = 14
 MIN_HISTORY_PAYMENT = 250
 MAX_HISTORY_PAYMENT = 900
 
 SOLUTIONS = 10
-COMPARISON_EVALUATIONS = 500
+COMPARISON_EVALUATIONS = MAX_ITERATIONS
 
 
 @dataclass(frozen=True)
@@ -39,6 +39,15 @@ class SimulationConfig:
     max_history_payment: int = MAX_HISTORY_PAYMENT
     solutions: int = SOLUTIONS
     comparison_evaluations: int = COMPARISON_EVALUATIONS
+
+    @property
+    def annealing_iterations(self) -> int:
+        temperature = self.temperature
+        for iterations in range(self.max_iterations):
+            if temperature <= self.minimum_temperature:
+                return iterations
+            temperature *= self.alpha
+        return self.max_iterations
 
     def __post_init__(self) -> None:
         integer_fields = (

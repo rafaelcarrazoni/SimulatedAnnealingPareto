@@ -19,7 +19,7 @@ def main(
 ) -> None:
     settings = config or SimulationConfig()
     random_generator = random.Random(seed)
-    work_per_run = settings.max_iterations + settings.comparison_evaluations
+    work_per_run = settings.annealing_iterations + settings.comparison_evaluations
     total_work = settings.solutions * work_per_run
     for solution_number in range(1, settings.solutions + 1):
         run_offset = (solution_number - 1) * work_per_run
@@ -84,7 +84,7 @@ def main(
                 team,
                 histories,
                 progress_callback=lambda completed, _: progress_callback(
-                    run_offset + settings.max_iterations + completed,
+                    run_offset + settings.annealing_iterations + completed,
                     total_work,
                     f"Execução {solution_number}/{settings.solutions} · Busca aleatória",
                 ),

@@ -40,6 +40,7 @@ class Blacksmith:
         }
         self._random = random.Random(seed)
         self.solutions: list[list[Developer]] = []
+        self.iterations_completed = 0
         self.initial_solution_snapshot: list[Developer] | None = None
         self._histories: list[History] = []
 
@@ -53,12 +54,13 @@ class Blacksmith:
         current = self.initial_solution(team, histories)
         self.initial_solution_snapshot = copy.deepcopy(current)
         self.solutions = [copy.deepcopy(current)]
+        self.iterations_completed = 0
         self.temperature = self._initial_temperature
 
         for iteration in range(1, self.max_iterations + 1):
             if self.temperature <= self.minimum_temperature:
                 if progress_callback is not None:
-                    progress_callback(self.max_iterations, self.max_iterations)
+                    progress_callback(self.iterations_completed, self.max_iterations)
                 break
 
             neighbor = self.get_neighbor(current)
@@ -70,6 +72,7 @@ class Blacksmith:
                 current = neighbor
 
             self.temperature *= self.alpha
+            self.iterations_completed = iteration
             if progress_callback is not None:
                 progress_callback(iteration, self.max_iterations)
 

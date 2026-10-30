@@ -35,12 +35,15 @@ class Export:
         if run_metadata is not None:
             payload["run_metadata"] = run_metadata
         if isinstance(obj, Blacksmith):
+            payload["iterations"] = obj.iterations_completed
             payload["initial_configuration"] = obj.initial_configuration
             payload["initial_solution"] = (
                 Export._serialize_solution(obj.initial_solution_snapshot)
                 if obj.initial_solution_snapshot is not None
                 else None
             )
+        else:
+            payload["iterations"] = obj.evaluations_completed
 
         with output_path.open("a", encoding="utf-8") as result_file:
             json.dump(payload, result_file, ensure_ascii=False)
