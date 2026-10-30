@@ -147,8 +147,8 @@ class Blacksmith:
         ]
 
         actions = []
-        if assignments:
-            actions.append("remove")
+        #if assignments:
+            #actions.append("remove")
         if move_choices:
             actions.append("move")
         if add_choices:
